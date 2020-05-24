@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary navbar-fixed-top">
+    <a class="navbar-brand" href="#"> <i class="fa fa-gavel"></i> E-Auction</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">recommendations for you</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Notifications</a>
+        </li>
+      </ul>
+      <form class="form-inline">
+            <a class="btn btn-primary" href="/users/logout"> <i class="fa fa-sign-out"></i> log out</a>
+            <img src="<%= user.picture %>" alt="avatar image" width="45" height="45" class="rounded-circle"/>
+      </form>
+    </div>
+  </nav>
+  <div class="container">
+
+<h1 class="mt-4">Welcome <%= user.familyName %> <%= user.givenName %></h1>
+<% if(user.outdone == true){%>
+  <div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Emergency! </strong> One of your bids was outdone. Go bid to win the auction !
+  </div>
+<%}%>
+<% if(user.winner == true){%>
+  <div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Congratulations! </strong> You won one auction! check your notifications !
+  </div>
+<%}%>
+<br><br>
+
+
+<%- include ('./partials/messages.ejs') %>
+
+
+
+<div class="container">
+</div>
+</div>
