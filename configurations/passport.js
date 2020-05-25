@@ -8,28 +8,7 @@ const clientsecret = require('./keys').GoogleClientSecret;
 //load user model
 const User = require('../models/User');
 module.exports = function(passport){
-    passport.use(
-        new LocalStrategy({ usernameField: 'email'}, (email,password,done)=>{
-            //match user
-            User.findOne({email: email})
-            .then(user =>{
-                if(!user){
-                    return done(null, false, {message: 'The email is not registered'});
-                }
-
-                //Match password
-                bcrypt.compare(password, user.password, (err, isMatch)=>{
-                    if(err) throw err;
-                    if(isMatch){
-                        return done(null, user);
-                    } else {
-                        return done(null, false, {message: 'Password incorrect'});
-                    }
-                });
-            })
-            .catch(err => console.log(err));
-        })
-    );
+    
 
 
     passport.use(
@@ -47,9 +26,9 @@ module.exports = function(passport){
                 } else {
                     new User({ 
                         email: profile.emails[0].value,
-                        familyName:profile.name.familyName,
-                        givenName: profile.name.givenName,
-                        picture:profile.photos[0].value  
+                        name: { familyName:profile.name.familyName,givenName: profile.name.givenName },
+                        picture:profile.photos[0].value,
+                        accountState:{verified: true}  
                     }).save().then((newUser)=>{
                         //console.log('New user created: \n',newUser);
                         return done(null, newUser);
@@ -59,6 +38,7 @@ module.exports = function(passport){
             .catch(err => console.log(err));     
         }
     ));
+
 
     passport.serializeUser(function(user, done) {
         done(null, user.id);

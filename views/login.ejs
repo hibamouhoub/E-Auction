@@ -1,36 +1,43 @@
+<div class="container">
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
       <div class="card card-body">
         <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Login</h1>
         <%- include ('./partials/messages.ejs') %>
+
         <form action="/users/login" method="POST">
           <div class="form-group">
             <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-control"
-              placeholder="Enter Email"
-            />
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email"/>
           </div>
+
           <div class="form-group">
             <label for="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              class="form-control"
-              placeholder="Enter Password"
-            />
+            <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"/>
           </div>
-          <button type="submit" class="btn btn-secondary btn-block">Login</button>
-          <br>
-          <a href="/auth/google" class="btn btn-primary btn-block mb-2"><i class="fa fa-google-plus" style="font-size:26px"></i> Login with google</a>
+
+          <button type="submit" class="btn btn-secondary btn-block">Login</button><br>
+          <div class="row">
+            <div class="col-md-6">
+          <a href="/auth/google" class="btn btn-danger btn-block mb-2">
+            <i class="fa fa-google-plus"></i> 
+            Login with google
+          </a></div>
+          <div class="col-md-6">
+          <a href="#" style="background-color: #4267B2;" class="btn btn-primary btn-block mb-2">
+            <i class="fa fa-facebook"></i>
+             Login with facebook
+          </a>
+
+
+        </div>
+        </div>
         </form>
+
         <p class="lead mt-4">
-          No Account? <a href="#">Register</a>
+          No Account? <a href="/users/register">Register</a>
         </p>
       </div>
     </div>
   </div>
+</div>

@@ -24,7 +24,7 @@
   </nav>
   <div class="container">
 
-<h1 class="mt-4">Welcome <%= user.familyName %> <%= user.givenName %></h1>
+<h1 class="mt-4">Welcome <%= user.name.familyName %> <%= user.name.givenName %></h1>
 <% if(user.outdone == true){%>
   <div class="alert alert-dismissible alert-success">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
