@@ -10,11 +10,16 @@ const session = require('express-session');
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
+//images static
+app.use('/images', express.static('images'));
+
 // Passport Config
 require('./configurations/passport')(passport);
 
 //body parser
 app.use(express.urlencoded({extended: false}));
+
+
 
 //Express session
 app.use(
@@ -39,6 +44,7 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash('error');
     next();
   });
+
 
 //DB config
 const db = require('./configurations/keys').MongoURI;

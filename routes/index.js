@@ -3,10 +3,12 @@ const router = express.Router();
 const passport = require('passport');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
 const { ensureAuthenticated, forwardAuthenticated } = require('../configurations/authentication');
 
 //User and offer models
 const User = require('../models/User');
+const Offer = require('../models/offer');
 
 
 //welcome page
@@ -64,10 +66,57 @@ router.post('/password', (req, res) => {
 
 //dashboard page
 router.get('/dashboard', ensureAuthenticated, (req, res) =>{
-  res.render('dashboard', {
-       user: req.user
-     });
+  Offer.find({'informations.ownerId':{$ne:req.user._id}} )
+  .then(offers =>{
+    console.log(offers);
+    res.render('dashboard', {
+      user: req.user,
+      offers: offers
+    });
+  });
+  
+    
 });
+
+//adding offers to the database
+router.get('/newOffer',(req,res) => res.render('newOffer'));  
+router.post('/newOffer', (req,res)=>{
+    const{name, subname, categories, description, price, deadline} = req.body;
+    let errors = [];
+    if (!name || !subname || !categories || !description || !price || !deadline) {
+        errors.push({ msg: 'Please enter all fields' });
+    }
+
+    if (errors.length >0){
+        res.render('newOffer', {
+            errors,name, subname, categories, description, price,deadline
+        });
+    } else {
+        const newOffer = new Offer ({
+            name,
+            informations:{
+              ownerId:req.user._id,
+              subname: subname,
+              categories: categories,
+              description: description,
+              deadline: deadline
+            },
+            pricing:{
+              initialPrice: price,
+              price:price  
+            }
+        });
+        newOffer.save()
+        .then(offer =>{
+            req.flash(
+                'success_msg',
+                'The offer was successfuly added to the database'
+            );
+            res.redirect('/dashboard');
+        })
+    }
+
+})
 
 
 

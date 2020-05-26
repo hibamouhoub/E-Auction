@@ -9,8 +9,7 @@ const UserSchema = new mongoose.Schema({
   picture: {type: String,required: false},
   password: {type: String,required: false},
   accountState:{
-    dateOfCreation: {type: Date,default: Date.now},
-    verified: {type: Boolean, required: true}
+    dateOfCreation: {type: Date,default: Date.now}
   },
   biddingStates:{
     outdone:{type: Boolean , default: false},

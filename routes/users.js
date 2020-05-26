@@ -1,5 +1,10 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
 const router = express.Router();
+const User = require('../models/User');
+
+
 
 
 //login page
@@ -51,9 +56,10 @@ router.post('/register', (req, res) => {
                     password2
                 });
             } else {
+
+                //saving the new user
                 const newUser = new User ({
-                    familyName,
-                    givenName,
+                    name: {familyName,givenName},
                     email,
                     password,
                     picture: 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png'
@@ -66,7 +72,7 @@ router.post('/register', (req, res) => {
                         .then(user => {
                             req.flash(
                                 'success_msg',
-                                'We sent a link to your email address. Check it to login !'
+                                'We sent a link to your email address. Check it to activate your account !'
                               );
                             res.redirect('/users/login');
                         })
@@ -80,12 +86,21 @@ router.post('/register', (req, res) => {
 
 });
 
+
+// Login
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+      successRedirect: '/dashboard',
+      failureRedirect: '/users/login',
+      failureFlash: true
+    })(req, res, next);
+});
   
-  // Logout
-  router.get('/logout', (req, res) => {
+// Logout
+router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success_msg', 'You are logged out');
     res.redirect('/users/login');
-  });
+});
 
 module.exports =router;
