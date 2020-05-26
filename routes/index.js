@@ -3,12 +3,25 @@ const router = express.Router();
 const passport = require('passport');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const multer = require('multer');
 const { ensureAuthenticated, forwardAuthenticated } = require('../configurations/authentication');
 
 //User and offer models
 const User = require('../models/User');
 const Offer = require('../models/offer');
+
+//configuring multer
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, 'images');
+    },
+    filename: function(req, file, cb) {
+      cb(null, req.user._id+file.originalname);
+    }
+});
+const upload = multer({
+    storage: storage
+});
 
 
 //welcome page
@@ -68,7 +81,6 @@ router.post('/password', (req, res) => {
 router.get('/dashboard', ensureAuthenticated, (req, res) =>{
   Offer.find({'informations.ownerId':{$ne:req.user._id}} )
   .then(offers =>{
-    console.log(offers);
     res.render('dashboard', {
       user: req.user,
       offers: offers
@@ -80,8 +92,9 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>{
 
 //adding offers to the database
 router.get('/newOffer',(req,res) => res.render('newOffer'));  
-router.post('/newOffer', (req,res)=>{
+router.post('/newOffer',upload.single('picturez'), (req,res)=>{
     const{name, subname, categories, description, price, deadline} = req.body;
+    const pictureName = `${req.file.filename}`;
     let errors = [];
     if (!name || !subname || !categories || !description || !price || !deadline) {
         errors.push({ msg: 'Please enter all fields' });
@@ -97,6 +110,7 @@ router.post('/newOffer', (req,res)=>{
             informations:{
               ownerId:req.user._id,
               subname: subname,
+              picture: pictureName,
               categories: categories,
               description: description,
               deadline: deadline
@@ -116,10 +130,29 @@ router.post('/newOffer', (req,res)=>{
         })
     }
 
+});
+
+//checking offer
+router.get('/offer', (req,res)=>{
+  Offer.findById(req.query.id)
+  .then(offer =>{
+        res.render('offer',{
+          user: req.user,
+          offerId: offer,
+          rate:0
+        });
+  })
+  .catch(err => console.log(err));
+});
+
+
+//goback from offer page to dashboard
+router.get('/goback',(req,res)=>{
+  User.findOne({_id: req.query.id})
+.then(user =>{
+  res.redirect('/dashboard');
 })
-
-
-
+})
 
   
 

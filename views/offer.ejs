@@ -1,0 +1,130 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <a class="navbar-brand" href="#"> <i class="fa fa-gavel"></i> E-Auction</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="">Recommendations for you</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Explore</a>
+      </li>
+    </ul>
+    <form class="form-inline">
+          <a class="btn btn-primary" href="/goback?id=<%= user._id %>"> <i class="fas fa-reply"></i> go back</a>
+          <a class="btn btn-primary" href="/users/logout"> <i class="fa fa-sign-out"></i> log out</a>
+          <img src="<%= user.picture %>" alt="avatar image" width="40" height="40" class="rounded-circle"/>
+    </form>
+  </div>
+</nav>
+<br><br><br>
+
+
+
+
+<div class="row">
+  <div class="col-sm-2" style="margin-left: 15px;">
+    <div class="position-fixed">
+      <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+            <img src="<%= user.picture %>" alt="avatar image" width="35" height="35" class="rounded-circle"/>
+          <strong>&nbsp&nbsp<%= user.name.familyName %> <%= user.name.givenName %></strong>
+        </a>
+        <a href="/newOffer" class="list-group-item list-group-item-action">
+        <i class="fa fa-plus-square"></i><strong>&nbsp New offer</strong>
+          <span class="badge badge-primary badge-pill"></span>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action ">
+           <i class="fa fa-hourglass-1"></i><strong>&nbsp Bids hisotry</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action ">
+          <i class="fa fa-check"></i><strong>&nbsp Purchases</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action ">
+          <i class="fa fa-hourglass-1"></i><strong>&nbsp Current offers</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action ">
+          <i class="fa fa-check"></i>&nbsp <strong>sells</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action ">
+          <i class="fa fa-bell"></i><strong>&nbsp Notifications</strong>
+        </a>
+      </div>
+  </div>
+
+  </div>
+
+  <%- include ('./partials/messages.ejs') %>
+  <p></p>
+
+  <div class="col-sm-9">
+            <div class="card mb-8" style="margin-left: 50px;">
+                <h3 class="card-header"><%= offerId.name %> <small class="text-muted"><%= offerId.informations.subname %></small></h3>
+                <div class="row">
+                  <div class="col-md-6">
+                    <img src="images/<%= offerId.informations.picture %>" style="margin-left:12px;height: 100%; width: 100%; object-fit: contain" alt="Card image">
+                  </div>
+                  <div class="col-md-6">
+                  
+                  <ul class="list-group list-group-flush">
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted">Description:</h6><br> <%= offerId.informations.description %></p></li>
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Categories: <%= offerId.informations.categories %></h6></li>
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Initial price: <%= offerId.pricing.initialPrice %></h6></li>
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offerId.pricing.price %></h6></li>
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Make a bid</h6><br>
+                      <form action="/bid" method="POST">
+                        <div class="form-group">
+                          <div class="form-group">
+                            <div class="input-group mb-3">
+                              <input type="number" id="theBid" name="theBid" oninput="myFunctionz()" class="form-control" aria-label="Amount (to the nearest dollar)">
+                              <script>
+                                function myFunctionz() {
+                                  var currentPrice = '<%= offerId.pricing.price %>';
+                                  var price = document.getElementById("theBid").value;
+                                  if(parseFloat(price)>currentPrice){document.getElementById("goBid").disabled = false;}
+                                  else {document.getElementById("goBid").disabled = true;}
+                                }
+                                </script>
+                              <div class="input-group-append">
+                                <span class="input-group-text">$</span>
+                              </div>
+                            </div>
+                          </div><div class="row"><div class="col-md-4"></div><div class="col-md-4">
+                            <input type="hidden" value="<%= offerId._id %>" name="offerid2" id="offerid2" />
+                          <button type="submit" id="goBid" class="btn btn-primary btn-block" disabled>send the bid</button></div></div>
+                      </form>
+                      </li>
+                      <li class="list-group-item">
+                        <form action="/rate" method="POST">
+                          <fieldset class="form-group">
+                            <label for="customRange1"><h6 class="card-subtitle text-muted">Your rate for this offer</h6></label>
+                            <%  if(rate){ %>
+                            <input type="range" class="custom-range" value="<%= rate%>" name="customRange1" id="customRange1">
+                            <%} else {%>
+                              <input type="range" class="custom-range" name="customRange1" id="customRange1">
+                              <%}%>
+                          </fieldset>
+                          <div class="row"><div class="col-md-4"></div><div class="col-md-4">
+                            <input type="hidden" value="<%= offerId._id %>" name="offerid" id="offerid" />
+                            <input type="hidden" value="<%= user._id %>" name="userid" id="userid" />
+                            <button type="submit" class="btn btn-primary btn-block">send your rating</button>
+                          </div></div>
+                        </form>
+                        
+                      </li>
+                  </ul>
+                  </div>
+                </div>
+                
+            </div>
+        </div>
+   
+</div>
+
+<br><br><br><br><br>

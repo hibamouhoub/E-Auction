@@ -60,29 +60,26 @@
     </div>
 
     <div class="col-sm-9">
+      <%- include ('./partials/messages.ejs') %>
       <div class="row">
         <%
-        for(var i = 0;i<1;i++){
+        for(var i = 0;i<offers.length;i++){
         %>
           <div class="col-sm-3 col-md-6 col-lg-4">
               <div class="card mb-3">
-                  <h3 class="card-header"><%= offers[i].name %></h3>
-                  <div class="card-body">
-                      <h5 class="card-title"><%= offers[i].informations.subname %></h5>
-                  </div>
-                  <img style="height: 200px; width: 100%; display: block;" src="<%= offers[i].informations.picture %>" alt="Card image">
+                  <h4 class="card-header"><%= offers[i].name %></h4>
+                  <a href="/offer?id=<%= offers[i]._id %>">
+                    <img style="height: 200px; width: 100%; display: block;" src="images/<%= offers[i].informations.picture %>" alt="Card image">
+                  </a>
                   <ul class="list-group list-group-flush">
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Categories: <%= offers[i].informations.categories %></h6></li>
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Initial price: <%= offers[i].pricing.initialPrice %></h6></li>
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offers[i].pricing.price %></h6></li> 
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offers[i].pricing.price %>$</h6></li> 
                   </ul>
-                  <a href="#" class="btn btn-primary btn-block">check offer</a>
               </div>
           </div>
           <%}%>
       </div>
 
-      <%- include ('./partials/messages.ejs') %>
+      
 
     </div>
 
