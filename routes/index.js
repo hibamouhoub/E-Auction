@@ -8,6 +8,8 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../configurations
 //User and offer models
 const User = require('../models/User');
 const Offer = require('../models/offer');
+const Rate = require('../models/Rate');
+const Bid = require('../models/Bid');
 
 //configuring multer
 const multer = require('multer');
@@ -78,15 +80,18 @@ router.post('/password', (req, res) => {
 
 
 //dashboard page
-router.get('/dashboard', ensureAuthenticated, (req, res) =>{
-  Offer.find({'informations.ownerId':{$ne:req.user._id}} )
+router.get('/dashboard', ensureAuthenticated, async(req, res) =>{
+  var offerMap = [];
+  await Offer.find({'informations.ownerId':{$ne:req.user._id}} )
   .then(offers =>{
-    res.render('dashboard', {
-      user: req.user,
-      offers: offers
-    });
+    offers.forEach(offer=>{
+      offerMap.push(offer);
+    })
   });
-  
+  res.render('dashboard', {
+    user: req.user,
+    offers: offerMap
+  });
     
 });
 
@@ -136,11 +141,23 @@ router.post('/newOffer',upload.single('picturez'), (req,res)=>{
 router.get('/offer', (req,res)=>{
   Offer.findById(req.query.id)
   .then(offer =>{
+    Rate.findOne({userId: req.user._id, offerId: req.query.id})
+    .then(newrate =>{
+      if(newrate){
         res.render('offer',{
+          rate: newrate.rate,
           user: req.user,
-          offerId: offer,
-          rate:0
+          offerId: offer
         });
+      } else {
+        res.render('offer',{
+          rate: 0,
+          user: req.user,
+          offerId: offer
+        });
+      }
+    })
+    .catch(err => console.log(err));
   })
   .catch(err => console.log(err));
 });
@@ -148,11 +165,119 @@ router.get('/offer', (req,res)=>{
 
 //goback from offer page to dashboard
 router.get('/goback',(req,res)=>{
-  User.findOne({_id: req.query.id})
-.then(user =>{
-  res.redirect('/dashboard');
-})
-})
+    User.findOne({_id: req.query.id})
+  .then(user =>{
+    res.redirect('/dashboard');
+  })
+  });
+
+//the rate 
+router.post('/rate', (req,res)=>{
+  const offerid = req.body.offerid;
+  const customRange1 = req.body.customRange1;
+  Rate.findOne({userId: req.user._id, offerId: offerid})
+  .then(newrate =>{
+    if(!newrate){
+      const newRate = new Rate({
+        userId: req.user._id,
+        offerId: offerid,
+        rate: customRange1
+      });
+      newRate.save()
+      .then(rate =>{
+        Offer.findOne({_id:offerid })
+          .then(offer =>{
+            Rate.find({offerId: offer._id})
+            .then(rates =>{
+              var totalRate = 0.0;
+              var i = 0;
+              rates.forEach((rateuh)=>{
+              totalRate= totalRate + rateuh.rate;
+              i= i+1;
+              });
+              offer.rating = totalRate/i;
+              offer.save();
+            });
+              req.flash(
+                'success_msg',
+                'Your rate was saved in the database'
+              );
+              res.redirect('/offer?id='+offerid);
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+    } else {
+      newrate.rate = customRange1;
+      newrate.save()
+      .then(user => {
+         Offer.findOne({_id:offerid })
+          .then(offer =>{
+              Rate.find({offerId: offer._id})
+              .then(rates =>{
+                var totalRate = 0.0;
+                var i = 0;
+                rates.forEach((rateuh)=>{
+                  totalRate= totalRate + rateuh.rate;
+                  i= i+1;
+                });
+                offer.rating = totalRate/i;
+                //console.log(offer.rating);
+                offer.save();
+              });
+               req.flash(
+                 'success_msg',
+                 'Your rate was saved in the database'
+               );
+               res.redirect('/offer?id='+offerid);
+          })
+        })
+        .catch(err => console.log(err));
+    }
+  })
+  .catch(err => console.log(err));
+});
+
+//the bid
+router.post('/bid',(req,res)=>{
+  const offerId = req.body.offerid2;
+  const theBid = req.body.theBid;
+  const userId = req.user._id;
+  User.findOne({_id:userId})
+  .then(useer=>{
+    if (useer.biddingStates.outdone>0){
+      useer.biddingStates.outdone--;
+    }
+    useer.save();
+  });
+  const newBid = new Bid({
+    userId,
+    offerId,
+    theBid
+  });
+  newBid.save()
+  .then(bid =>{
+      Offer.findOne({_id:offerId})
+      .then(offer=>{
+        offer.pricing.price = theBid;
+        User.findOne({_id:offer.pricing.currentBidderId})
+        .then(useer=>{
+            useer.biddingStates.outdone = useer.biddingStates.outdone + 1;
+            useer.save();
+        });
+        offer.pricing.currentBidderId = userId;
+        offer.save();
+        req.flash(
+          'success_msg',
+          'Your bid was saved in the database'
+        );
+        res.redirect('/offer?id='+offerId);
+      })
+      .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err));
+});
+
 
   
 

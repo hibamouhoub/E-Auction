@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     dateOfCreation: {type: Date,default: Date.now}
   },
   biddingStates:{
-    outdone:{type: Boolean , default: false},
+    outdone:{type: Number , default: 0},
     winner:{type: Boolean , default: false}
   }
 });

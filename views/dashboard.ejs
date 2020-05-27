@@ -53,14 +53,23 @@
           </a>
           <a href="#" class="list-group-item list-group-item-action ">
             <i class="fa fa-bell"></i><strong>&nbsp Notifications</strong>
+            <% if(user.biddingStates.outdone > 0){%>
+            <span id="notificationSpan" class="badge badge-danger badge-pill"><%= user.biddingStates.outdone %></span>
+            <%}%>
           </a>
         </div>
     </div>
 
     </div>
 
-    <div class="col-sm-9">
+    <div class="col-sm-9" style="margin-left: 28px;">
       <%- include ('./partials/messages.ejs') %>
+      <% if(user.biddingStates.outdone > 0){%>
+        <div class="alert alert-dismissible alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Emergency! </strong> <%= user.biddingStates.outdone %> of your bids was outdone. Go bid to win the auctions !
+        </div>
+      <%}%>
       <div class="row">
         <%
         for(var i = 0;i<offers.length;i++){
@@ -73,6 +82,11 @@
                   </a>
                   <ul class="list-group list-group-flush">
                       <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offers[i].pricing.price %>$</h6></li> 
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted">rate: <%= offers[i].rating %>/100</h6>
+                        <div class="progress" style="margin-top: 10px;">
+                          <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: <%= offers[i].rating %>%"></div>
+                        </div>
+                      </li>
                   </ul>
               </div>
           </div>
