@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="#"> <i class="fa fa-gavel"></i> E-Auction</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
         </li>
       </ul>
       <form class="form-inline">
-            <a class="btn btn-primary" href="/users/logout"> <i class="fa fa-sign-out"></i> log out</a>
+            <a class="nav-link" href="/users/logout" style="color: rgb(255, 255, 255);"> <i class="fa fa-sign-out"></i> log out</a>
             <img src="<%= user.picture %>" alt="avatar image" width="40" height="40" class="rounded-circle"/>
       </form>
     </div>
@@ -35,27 +35,27 @@
               <img src="<%= user.picture %>" alt="avatar image" width="35" height="35" class="rounded-circle"/>
             <strong>&nbsp&nbsp<%= user.name.familyName %> <%= user.name.givenName %></strong>
           </a>
-          <a href="/newOffer" class="list-group-item list-group-item-action">
-          <i class="fa fa-plus-square"></i><strong>&nbsp New offer</strong>
+          <a href="/newOffer" class="list-group-item list-group-item-action bg-light">
+          <h5><i class="fa fa-plus-square"></i>&nbsp New offer</h5>
             <span class="badge badge-primary badge-pill"></span>
           </a>
-          <a href="#" class="list-group-item list-group-item-action ">
-             <i class="fa fa-hourglass-1"></i><strong>&nbsp Bids hisotry</strong>
+          <a href="#" class="list-group-item list-group-item-action bg-light">
+          <h5> <i class="fa fa-hourglass-1"></i>&nbsp Bids hisotry</h5>
           </a>
-          <a href="#" class="list-group-item list-group-item-action ">
-            <i class="fa fa-check"></i><strong>&nbsp Purchases</strong>
+          <a href="#" class="list-group-item list-group-item-action bg-light">
+          <h5><i class="fa fa-check"></i>&nbsp Purchases</h5>
           </a>
-          <a href="#" class="list-group-item list-group-item-action ">
-            <i class="fa fa-hourglass-1"></i><strong>&nbsp Current offers</strong>
+          <a href="#" class="list-group-item list-group-item-action bg-light">
+          <h5> <i class="fa fa-hourglass-1"></i>&nbsp Current offers</h5>
           </a>
-          <a href="#" class="list-group-item list-group-item-action ">
-            <i class="fa fa-check"></i>&nbsp <strong>sells</strong>
+          <a href="#" class="list-group-item list-group-item-action bg-light">
+          <h5> <i class="fa fa-check"></i>&nbsp sells</h5>
           </a>
-          <a href="#" class="list-group-item list-group-item-action ">
-            <i class="fa fa-bell"></i><strong>&nbsp Notifications</strong>
+          <a href="#" class="list-group-item list-group-item-action bg-light">
+          <h5> <i class="fa fa-bell"></i>&nbsp Notifications
             <% if(user.biddingStates.outdone > 0){%>
-            <span id="notificationSpan" class="badge badge-danger badge-pill"><%= user.biddingStates.outdone %></span>
-            <%}%>
+            <span id="notificationSpan" class="badge badge-primary badge-pill"><%= user.biddingStates.outdone %></span>
+            <%}%></h5>
           </a>
         </div>
     </div>
@@ -65,7 +65,7 @@
     <div class="col-sm-9" style="margin-left: 28px;">
       <%- include ('./partials/messages.ejs') %>
       <% if(user.biddingStates.outdone > 0){%>
-        <div class="alert alert-dismissible alert-danger">
+        <div class="alert alert-dismissible alert-primary">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
           <strong>Emergency! </strong> <%= user.biddingStates.outdone %> of your bids was outdone. Go bid to win the auctions !
         </div>
@@ -84,7 +84,7 @@
                       <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offers[i].pricing.price %>$</h6></li> 
                       <li class="list-group-item"><h6 class="card-subtitle text-muted">rate: <%= offers[i].rating %>/100</h6>
                         <div class="progress" style="margin-top: 10px;">
-                          <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: <%= offers[i].rating %>%"></div>
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: <%= offers[i].rating %>%"></div>
                         </div>
                       </li>
                   </ul>
