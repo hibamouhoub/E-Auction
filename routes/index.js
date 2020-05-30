@@ -195,7 +195,7 @@ router.post('/rate', (req,res)=>{
               totalRate= totalRate + rateuh.rate;
               i= i+1;
               });
-              offer.rating = totalRate/i;
+              offer.rating = Math.round(totalRate/i + "e+1")  + "e-1";
               offer.save();
             });
               req.flash(
@@ -221,7 +221,7 @@ router.post('/rate', (req,res)=>{
                   totalRate= totalRate + rateuh.rate;
                   i= i+1;
                 });
-                offer.rating = totalRate/i;
+                offer.rating = Math.round(totalRate/i + "e+1")  + "e-1";
                 //console.log(offer.rating);
                 offer.save();
               });
@@ -259,6 +259,11 @@ router.post('/bid',(req,res)=>{
   .then(bid =>{
       Offer.findOne({_id:offerId})
       .then(offer=>{
+        User.findOne({_id:offer.informations.ownerId})
+        .then(userr=>{
+          userr.offerStates.newBid = userr.offerStates.newBid + 1;
+          userr.save();
+        });
         offer.pricing.price = theBid;
         User.findOne({_id:offer.pricing.currentBidderId})
         .then(useer=>{
