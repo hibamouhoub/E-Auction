@@ -284,7 +284,20 @@ router.post('/bid',(req,res)=>{
 });
 
 
-  
+//current offers
+router.get('/currentOffers', async(req,res)=>{
+  var offerMap = [];
+  await Offer.find({'informations.ownerId':req.user._id} )
+  .then(offers =>{
+    offers.forEach(offer=>{
+      offerMap.push(offer);
+    })
+  });
+  res.render('currentOffers', {
+    user: req.user,
+    offers: offerMap
+  });
+});
 
 
 

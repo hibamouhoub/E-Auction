@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
   biddingStates:{
     outdone:{type: Number , default: 0},
     winner:{type: Boolean , default: false}
+  },
+  offerStates: {
+    newBid:{type: Number , default:0}
   }
 });
 

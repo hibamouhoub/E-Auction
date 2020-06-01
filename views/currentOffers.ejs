@@ -46,7 +46,7 @@
           <a href="#" class="list-group-item list-group-item-action ">
           <h5 style="color: black;"><i class="fa fa-check"></i>&nbsp Purchases</h5>
           </a>
-          <a href="/currentOffers" class="list-group-item list-group-item-action ">
+          <a href="#" class="list-group-item list-group-item-action ">
           <h5 style="color: black;"> <i class="fa fa-hourglass-1"></i>&nbsp Current offers
             <% if(user.offerStates.newBid > 0){%>
               <span id="notificationSpan" class="badge badge-primary badge-pill"><%= user.offerStates.newBid %></span>
@@ -67,44 +67,19 @@
     </div>
 
     <div class="col-sm-9" style="margin-left: 28px;">
-      <%- include ('./partials/messages.ejs') %>
-      <% if(user.biddingStates.outdone > 0){%>
-        <div class="alert alert-dismissible alert-primary">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>Emergency! </strong> <%= user.biddingStates.outdone %> of your bids was outdone. Go bid to win the auctions !
-        </div>
-      <%}%>
-      <% if(user.offerStates.newBid > 0){%>
-        <div class="alert alert-dismissible alert-primary">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>news ! </strong> You have <%= user.offerStates.newBid %> new bids on your offers !
-        </div>
-      <%}%>
       <div class="row">
-        <%
-        for(var i = 0;i<offers.length;i++){
-        %>
-          <div class="col-sm-3 col-md-6 col-lg-4">
-              <div class="card mb-3">
-                  <h4 class="card-header"><%= offers[i].name %></h4>
-                  <a href="/offer?id=<%= offers[i]._id %>">
-                    <img style="height: 200px; width: 100%; display: block;" src="images/<%= offers[i].informations.picture %>" alt="Card image">
-                  </a>
-                  <ul class="list-group list-group-flush">
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offers[i].pricing.price %>$</h6></li> 
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted">rate: <%= offers[i].rating %>/100</h6>
-                        <div class="progress" style="margin-top: 10px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: <%= offers[i].rating %>%"></div>
-                        </div>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-          <%}%>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action disabled" style="background-color: #f5f5f5;"></a>
+                <% for(var i = 0;i<offers.length;i++){%>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <h5 class="mb-1"><%=offers[i].name%></h5>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action disabled" style="background-color: #f5f5f5;"></a>
+                <%}%>
+            </div>
+        </div>
       </div>
-
-      
-
     </div>
 
   </div>
