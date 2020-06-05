@@ -72,7 +72,7 @@
             <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action disabled" style="background-color: #f5f5f5;"></a>
                 <% for(var i = 0;i<offers.length;i++){%>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="/bidsHistory?id=<%=offers[i]._id%>" class="list-group-item list-group-item-action">
                         <h5 class="mb-1"><%=offers[i].name%></h5>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action disabled" style="background-color: #f5f5f5;"></a>
