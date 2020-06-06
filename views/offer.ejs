@@ -28,6 +28,7 @@
 
 
 
+
 <div class="row">
   <div class="col-sm-2" style="margin-left: 15px;">
     <div class="position-fixed">
@@ -65,7 +66,27 @@
 
 
   <div class="col-sm-9">
-    <div style="margin-left:50px ;"><%- include ('./partials/messages.ejs') %></div>
+    <div style="margin-left:50px ;"><%- include ('./partials/messages.ejs') %>
+      <h3 class="text-center" id="deadlineeeee"></h3><br>
+      <script>
+        var test = '<%= offerId.informations.deadline %>';
+        var countDownDate = new Date(test).getTime();
+        var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        console.log(test);
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        //document.getElementById("deadlineeeee").innerHTML = days;
+        document.getElementById("deadlineeeee").innerHTML = "~~ this offer expires in "+days + "d " + hours + "h "+ minutes + "m " + seconds + "s ~~";
+        if (distance < 0) {
+           clearInterval(x);
+           document.getElementById("deadlineeeee").innerHTML = "EXPIRED";
+        }
+        }, 1000);
+      </script></div>
             <div class="card mb-8" style="margin-left: 50px;">
                 <h3 class="card-header"><%= offerId.name %> <small class="text-muted"><%= offerId.informations.subname %></small></h3>
                 <div class="row">
@@ -75,7 +96,7 @@
                   <div class="col-md-6">
                   
                   <ul class="list-group list-group-flush">
-                      <li class="list-group-item"><h6 class="card-subtitle text-muted">Description:</h6><br> <%= offerId.informations.description %></p></li>
+                      <li class="list-group-item"><h6 class="card-subtitle text-muted">Description:</h6><br> <%= offerId.informations.description %></li>
                       <li class="list-group-item"><h6 class="card-subtitle text-muted"> Categories: <%= offerId.informations.categories %></h6></li>
                       <li class="list-group-item"><h6 class="card-subtitle text-muted"> Initial price: <%= offerId.pricing.initialPrice %>$</h6></li>
                       <li class="list-group-item"><h6 class="card-subtitle text-muted"> Current price: <%= offerId.pricing.price %>$</h6></li>
