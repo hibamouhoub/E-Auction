@@ -299,6 +299,60 @@ router.get('/currentOffers', async(req,res)=>{
   });
 });
 
+//offer's bid history
+router.get('/bidsHistory',async(req,res)=>{
+  var bidMap = [];
+  var rateMap = [];
+  await Bid.find({'offerId':req.query.id}).sort({'date':-1})
+  .then(async bids =>{
+    for(bid of bids){
+      var complet = [];
+      await User.findById(bid.userId)
+      .then(user=>{
+        complet.push(user);
+      });
+      complet.push(bid);
+      bidMap.push(complet);
+    }
+    // bids.forEach(async bid=>{
+    //   var complet = [];
+    //   User.findById(bid.userId)
+    //   .then(user=>{
+    //     complet.push(user);
+    //   });
+    //   complet.push(bid);
+    //   bidMap.push(complet);
+    // })
+  });
+  await Rate.find({'offerId':req.query.id}).sort({'date':-1})
+  .then(async rates =>{
+    for(rate of rates){
+      var complet = [];
+      await User.findById(rate.userId)
+      .then(user=>{
+        complet.push(user);
+      });
+      complet.push(rate);
+      rateMap.push(complet);
+    }
+    // rates.forEach(async rate=>{
+    //   var complet = [];
+    //   User.findById(rate.userId)
+    //   .then(user=>{
+    //     complet.push(user);
+    //   });
+    //   complet.push(rate);
+    //   rateMap.push(complet);
+    // })
+  });
+  console.log(rateMap);
+  res.render('bidRateHistory', {
+    user: req.user,
+    rates: rateMap,
+    bids: bidMap
+  });
+  
+});
 
 
 //google authentication page and callback page

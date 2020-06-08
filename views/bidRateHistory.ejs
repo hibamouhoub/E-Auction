@@ -1,0 +1,51 @@
+<%- include ('./header.ejs') %>
+
+    <div class="col-sm-9" style="margin-left: 28px;">
+        <div class="row">
+
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3 class="text-center"> Bids history </h3><br>
+            <table class="table table-hover table-striped" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th scope="col">Bidder</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Date</th>
+                  </tr>
+                </thead>
+                <% for(var i = 0;i<bids.length;i++){%>
+                    <tr>
+                        <td><%=bids[i][0].name.familyName%> <%=bids[i][0].name.givenName%></td>
+                        <td><%=bids[i][1].theBid%>$</td>
+                        <td><%=bids[i][1].date%></td>
+                      </tr>
+                <%}%>
+                </tbody>
+            </table> 
+          </div>
+
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3 class="text-center"> Rates history </h3><br>
+                <table class="table table-hover table-striped" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">rate</th>
+                        <th scope="col">Date</th>
+                      </tr>
+                    </thead>
+                    <% for(var i = 0;i<rates.length;i++){%>
+                        <tr>
+                            <td><%=rates[i][0].name.familyName%> <%=rates[i][0].name.givenName%></td>
+                            <td><%=rates[i][1].rate%>/100</td>
+                            <td><%=rates[i][1].date%></td>
+                          </tr>
+                    <%}%>
+                    </tbody>
+                </table> 
+        </div>
+
+        </div>
+      </div>
+  
+    </div>
